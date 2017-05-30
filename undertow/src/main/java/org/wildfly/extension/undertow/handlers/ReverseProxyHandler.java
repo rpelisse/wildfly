@@ -104,7 +104,7 @@ public class ReverseProxyHandler extends Handler {
             .setRequired(false)
             .setRestartAllServices()
             .setAllowExpression(true)
-            .setDefaultValue(new ModelNode(1L))
+            .setDefaultValue(new ModelNode(0L))
             .build();
 
     public static final ReverseProxyHandler INSTANCE = new ReverseProxyHandler();
