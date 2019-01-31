@@ -19,26 +19,25 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.as.webservices.tomcat;
+package org.jboss.as.webservices.web;
 
-import java.util.List;
-
-import org.jboss.as.webservices.metadata.model.EJBEndpoint;
-import org.jboss.as.webservices.metadata.model.JAXWSDeployment;
-import org.jboss.ws.common.integration.WSHelper;
+import org.jboss.as.webservices.logging.WSLogger;
+import org.jboss.ws.common.integration.AbstractDeploymentAspect;
 import org.jboss.wsf.spi.deployment.Deployment;
 
 /**
- * Creates web app security meta data for EJB 3 deployment.
- *
  * @author <a href="mailto:ropalka@redhat.com">Richard Opalka</a>
  */
-final class SecurityMetaDataAccessorEJB3 extends AbstractSecurityMetaDataAccessorEJB {
+public final class WebMetaDataModifyingDeploymentAspect extends AbstractDeploymentAspect {
+
+    private WebMetaDataModifier webMetaDataModifier = new WebMetaDataModifier();
 
     @Override
-    protected List<EJBEndpoint> getEjbEndpoints(final Deployment dep) {
-        final JAXWSDeployment jaxwsDeployment = WSHelper.getRequiredAttachment(dep, JAXWSDeployment.class);
-        return jaxwsDeployment.getEjbEndpoints();
+    public void start(final Deployment dep) {
+        if (WSLogger.ROOT_LOGGER.isTraceEnabled()) {
+            WSLogger.ROOT_LOGGER.tracef("Modifying web meta data for webservice deployment: %s", dep.getSimpleName());
+        }
+        webMetaDataModifier.modify(dep);
     }
 
 }
